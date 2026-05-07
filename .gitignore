@@ -2,8 +2,25 @@
 core/target/
 bindings/python/target/
 
+# Bindings General
+bindings/*/README.md
 
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+*.whl
+
+# Maturin
+bindings/python/.github/
 
 # IDE
 .vscode/
 .idea/
+
+# OS
+.DS_Store
+Thumbs.db

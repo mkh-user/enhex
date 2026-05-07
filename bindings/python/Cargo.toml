@@ -1,0 +1,18 @@
+[package]
+name = "enhex"
+version = "0.1.0"
+edition = "2021"
+description = "EnhEx - Enhanced Expression. Compile readable patterns to Regex."
+license = "MIT"
+repository = "https://github.com/mkh-user/enhex"
+
+[lib]
+name = "_enhex"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.21", features = ["extension-module"] }
+enhex_core = { path = "../../core" }
+
+[build-dependencies]
+pyo3-build-config = "0.21"

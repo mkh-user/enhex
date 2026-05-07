@@ -1,0 +1,29 @@
+[project]
+name = "enhex"
+version = "0.1.0"
+description = "EnhEx - Enhanced Expression. Write readable patterns, get Regex."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [
+    { name = "Mahan Khalili", email = "khalili1388mahan@gmail.com" }
+]
+keywords = ["regex", "dsl", "enhex", "pattern", "compiler"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Rust",
+]
+
+[project.scripts]
+enhex = "enhex.cli:main"
+
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+python-source = "src"
+module-name = "enhex._enhex"
