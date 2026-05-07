@@ -1,0 +1,23 @@
+name: Publish core to crates.io
+
+on:
+  push:
+    tags:
+      - 'core-v*'
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      
+      - name: Publish to crates.io
+        working-directory: core
+        run: cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
