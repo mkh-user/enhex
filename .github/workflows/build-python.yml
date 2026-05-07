@@ -1,4 +1,4 @@
-name: Python
+name: Build Python
 
 on:
   push:
