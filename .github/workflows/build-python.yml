@@ -6,7 +6,15 @@ on:
       - main
     tags:
       - '*'
+    paths:
+      - 'core/**'
+      - 'bindings/python/**'
+      - '.github/workflows/build-python.yml'
   pull_request:
+    paths:
+      - 'core/**'
+      - 'bindings/python/**'
+      - '.github/workflows/build-python.yml'
   workflow_dispatch:
 
 permissions:
@@ -16,6 +24,7 @@ jobs:
   linux:
     runs-on: ${{ matrix.platform.runner }}
     strategy:
+      fail-fast: false
       matrix:
         platform:
           - runner: ubuntu-latest
@@ -26,25 +35,24 @@ jobs:
             target: aarch64-unknown-linux-gnu
           - runner: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
-          # - runner: ubuntu-latest
-          #   target: s390x-unknown-linux-gnu
-          # - runner: ubuntu-latest
-          #   target: powerpc64le-unknown-linux-gnu
     steps:
       - uses: actions/checkout@v6
+
       - uses: actions/setup-python@v6
         with:
           python-version: 3.x
+
       - name: Copy README
         run: cp README.md bindings/python/README.md
+
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
           working-directory: bindings/python
           target: ${{ matrix.platform.target }}
           args: --release --out dist --find-interpreter
-          sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
           manylinux: auto
+
       - name: Upload wheels
         uses: actions/upload-artifact@v6
         with:
@@ -54,6 +62,7 @@ jobs:
   musllinux:
     runs-on: ${{ matrix.platform.runner }}
     strategy:
+      fail-fast: false
       matrix:
         platform:
           - runner: ubuntu-latest
@@ -66,19 +75,22 @@ jobs:
             target: armv7-unknown-linux-musleabihf
     steps:
       - uses: actions/checkout@v6
+
       - uses: actions/setup-python@v6
         with:
           python-version: 3.x
+
       - name: Copy README
         run: cp README.md bindings/python/README.md
+
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
           working-directory: bindings/python
           target: ${{ matrix.platform.target }}
           args: --release --out dist --find-interpreter
-          sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
           manylinux: musllinux_1_2
+
       - name: Upload wheels
         uses: actions/upload-artifact@v6
         with:
@@ -88,6 +100,7 @@ jobs:
   windows:
     runs-on: ${{ matrix.platform.runner }}
     strategy:
+      fail-fast: false
       matrix:
         platform:
           - runner: windows-latest
@@ -101,19 +114,22 @@ jobs:
             python_arch: arm64
     steps:
       - uses: actions/checkout@v6
+
       - uses: actions/setup-python@v6
         with:
           python-version: 3.13
           architecture: ${{ matrix.platform.python_arch }}
+
       - name: Copy README
         run: cp README.md bindings/python/README.md
+
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
           working-directory: bindings/python
           target: ${{ matrix.platform.target }}
           args: --release --out dist --find-interpreter
-          sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
       - name: Upload wheels
         uses: actions/upload-artifact@v6
         with:
@@ -123,26 +139,30 @@ jobs:
   macos:
     runs-on: ${{ matrix.platform.runner }}
     strategy:
+      fail-fast: false
       matrix:
         platform:
-          - runner: macos-15-intel
+          - runner: macos-latest
             target: x86_64-apple-darwin
           - runner: macos-latest
             target: aarch64-apple-darwin
     steps:
       - uses: actions/checkout@v6
+
       - uses: actions/setup-python@v6
         with:
           python-version: 3.x
+
       - name: Copy README
         run: cp README.md bindings/python/README.md
+
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
           working-directory: bindings/python
           target: ${{ matrix.platform.target }}
           args: --release --out dist --find-interpreter
-          sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
       - name: Upload wheels
         uses: actions/upload-artifact@v6
         with:
@@ -153,14 +173,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+
       - name: Copy README
         run: cp README.md bindings/python/README.md
+
       - name: Build sdist
         uses: PyO3/maturin-action@v1
         with:
           working-directory: bindings/python
           command: sdist
           args: --out dist
+
       - name: Upload sdist
         uses: actions/upload-artifact@v6
         with:
@@ -170,7 +193,7 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch' }}
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: [linux, musllinux, windows, macos, sdist]
     permissions:
       id-token: write
@@ -178,15 +201,16 @@ jobs:
       attestations: write
     steps:
       - uses: actions/download-artifact@v7
+
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v3
         with:
           subject-path: 'wheels-*/*'
+
       - name: Install uv
-        if: ${{ startsWith(github.ref, 'refs/tags/') }}
         uses: astral-sh/setup-uv@v7
+
       - name: Publish to PyPI
-        if: ${{ startsWith(github.ref, 'refs/tags/') }}
         run: uv publish 'wheels-*/*'
         env:
           UV_PUBLISH_TOKEN: ${{ secrets.PYPI_API_TOKEN }}

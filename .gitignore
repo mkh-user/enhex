@@ -2,8 +2,9 @@
 core/target/
 bindings/python/target/
 
-# Bindings General
+# Publish Duplicates
 bindings/*/README.md
+core/README.md
 
 # Python
 __pycache__/

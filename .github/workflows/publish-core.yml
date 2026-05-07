@@ -13,10 +13,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Setup Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Copy README
         run: cp README.md core/README.md
