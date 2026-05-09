@@ -1,0 +1,2 @@
+# expect: ^[\s\r\n]+$
+start + one_or_more(whitespace | carriage_return | newline) + end

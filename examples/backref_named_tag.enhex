@@ -1,0 +1,2 @@
+# expect: ^<(?P<tag>\w+)>.*?</(?P=tag)>$
+start + "<" + named("tag", one_or_more(word_char)) + ">" + zero_or_more_lazy(anything) + "</" + backref("tag") + ">" + end

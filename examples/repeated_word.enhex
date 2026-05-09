@@ -1,0 +1,2 @@
+# expect: ^([a-zA-Z]+) \1$
+start + group(one_or_more(letter)) + " " + backref(1) + end

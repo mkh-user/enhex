@@ -1,0 +1,2 @@
+# expect: ^@\w{1,15}$
+start + "@" + between(1, 15, word_char) + end

@@ -1,0 +1,2 @@
+# expect: ^\d{4}-\d{1,2}-\d{1,2}$
+start + exactly(4, digit) + "-" + between(1, 2, digit) + "-" + between(1, 2, digit) + end

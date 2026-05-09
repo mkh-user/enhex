@@ -9,7 +9,7 @@ keywords = ["regex", "dsl", "enhex", "pattern", "compiler"]
 categories = ["command-line-utilities", "parsing", "text-processing"]
 
 [dependencies]
-wasm-bindgen = "0.2"
+# wasm-bindgen = "0.2"
 thiserror = "1"
 
 [lib]

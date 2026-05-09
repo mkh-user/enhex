@@ -56,21 +56,43 @@ impl Lexer {
     }
 
     fn read_string(&mut self) -> Result<String, ParseError> {
-        // Skip opening quote
-        self.advance();
+        self.advance(); // skip opening quote
         let mut result = String::new();
         while let Some(ch) = self.peek() {
-            if ch == '"' {
-                self.advance(); // skip closing quote
-                return Ok(result);
+            match ch {
+                '"' => {
+                    self.advance(); // skip closing quote
+                    return Ok(result);
+                }
+                '\\' => {
+                    self.advance(); // skip backslash
+                    match self.peek() {
+                        Some('\\') => { result.push('\\'); self.advance(); }
+                        Some('"') => { result.push('"'); self.advance(); }
+                        Some('n') => { result.push('\n'); self.advance(); }
+                        Some('t') => { result.push('\t'); self.advance(); }
+                        Some(c) => {
+                            return Err(ParseError::new(
+                                format!("Unknown escape sequence: \\{}", c),
+                                self.line,
+                                self.col,
+                            ));
+                        }
+                        None => {
+                            return Err(ParseError::new(
+                                "Unclosed string literal after escape",
+                                self.line,
+                                self.col,
+                            ));
+                        }
+                    }
+                }
+                _ => {
+                    result.push(self.advance().unwrap());
+                }
             }
-            result.push(self.advance().unwrap());
         }
-        Err(ParseError::new(
-            "Unclosed string literal",
-            self.line,
-            self.col,
-        ))
+        Err(ParseError::new("Unclosed string literal", self.line, self.col))
     }
 
     fn read_identifier(&mut self) -> String {
@@ -140,8 +162,11 @@ impl Lexer {
                 let tok = match ident.as_str() {
                     // Atoms
                     "digit" => Token::Digit,
+                    "non_digit" => Token::NonDigit,
                     "word_char" => Token::WordChar,
+                    "non_word_char" => Token::NonWordChar,
                     "whitespace" => Token::Whitespace,
+                    "non_whitespace" => Token::NonWhitespace,
                     "lowercase" => Token::Lowercase,
                     "uppercase" => Token::Uppercase,
                     "letter" => Token::Letter,
@@ -150,6 +175,13 @@ impl Lexer {
                     "dash" => Token::Dash,
                     "tab" => Token::Tab,
                     "newline" => Token::Newline,
+                    "hex_digit" => Token::HexDigit,
+                    "carriage_return" => Token::CarriageReturn,
+                    "null" => Token::Null,
+                    "vertical_tab" => Token::VerticalTab,
+                    "form_feed" => Token::FormFeed,
+                    "bell" => Token::Bell,
+                    "backslash" => Token::Backslash,
 
                     // Quantifiers
                     "one_or_more" => Token::OneOrMore,
@@ -158,6 +190,9 @@ impl Lexer {
                     "exactly" => Token::Exactly,
                     "at_least" => Token::AtLeast,
                     "between" => Token::Between,
+                    "one_or_more_lazy" => Token::OneOrMoreLazy,
+                    "zero_or_more_lazy" => Token::ZeroOrMoreLazy,
+                    "optional_lazy" => Token::OptionalLazy,
 
                     // Groups
                     "group" => Token::Group,
@@ -174,6 +209,12 @@ impl Lexer {
                     "not_followed_by" => Token::NotFollowedBy,
                     "preceded_by" => Token::PrecededBy,
                     "not_preceded_by" => Token::NotPrecededBy,
+
+                    // Backreference
+                    "backref" => Token::Backref,
+
+                    // Negated char class
+                    "not" => Token::Not,
 
                     // Presets
                     "tld" => Token::Tld,

@@ -1,0 +1,2 @@
+# expect: ^[^aeiou]+$
+start + one_or_more(not("a" | "e" | "i" | "o" | "u")) + end

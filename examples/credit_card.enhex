@@ -1,0 +1,2 @@
+# expect: ^\d{16}$
+start + exactly(16, digit) + end

@@ -1,0 +1,2 @@
+# expect: ^(?:#[\da-fA-F]{6}|[a-zA-Z]+)$
+start + non_capturing(("#" + exactly(6, hex_digit)) | one_or_more(letter)) + end

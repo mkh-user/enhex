@@ -1,0 +1,2 @@
+# expect: ^.*(?:\r\n|\r|\n)$
+start + zero_or_more(anything) + non_capturing((carriage_return + newline) | (carriage_return) | newline) + end

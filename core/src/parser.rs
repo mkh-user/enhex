@@ -77,8 +77,11 @@ impl Parser {
         match tok {
             // Atoms
             Token::Digit => Ok(Expr::Atom(Atom::Digit)),
+            Token::NonDigit => Ok(Expr::Atom(Atom::NonDigit)),
             Token::WordChar => Ok(Expr::Atom(Atom::WordChar)),
+            Token::NonWordChar => Ok(Expr::Atom(Atom::NonWordChar)),
             Token::Whitespace => Ok(Expr::Atom(Atom::Whitespace)),
+            Token::NonWhitespace => Ok(Expr::Atom(Atom::NonWhitespace)),
             Token::Lowercase => Ok(Expr::Atom(Atom::Lowercase)),
             Token::Uppercase => Ok(Expr::Atom(Atom::Uppercase)),
             Token::Letter => Ok(Expr::Atom(Atom::Letter)),
@@ -87,6 +90,13 @@ impl Parser {
             Token::Dash => Ok(Expr::Atom(Atom::Dash)),
             Token::Tab => Ok(Expr::Atom(Atom::Tab)),
             Token::Newline => Ok(Expr::Atom(Atom::Newline)),
+            Token::HexDigit => Ok(Expr::Atom(Atom::HexDigit)),
+            Token::CarriageReturn => Ok(Expr::Atom(Atom::CarriageReturn)),
+            Token::Null => Ok(Expr::Atom(Atom::Null)),
+            Token::VerticalTab => Ok(Expr::Atom(Atom::VerticalTab)),
+            Token::FormFeed => Ok(Expr::Atom(Atom::FormFeed)),
+            Token::Bell => Ok(Expr::Atom(Atom::Bell)),
+            Token::Backslash => Ok(Expr::Atom(Atom::Backslash)),
 
             // Anchors
             Token::Start => Ok(Expr::Anchor(Anchor::Start)),
@@ -96,13 +106,40 @@ impl Parser {
             // Literal string
             Token::LiteralString(s) => Ok(Expr::Literal(s)),
 
+            // Backreference
+            Token::Backref => {
+                self.expect(Token::LParen)?;
+                let tok = self.next_token()?;
+                let backref = match tok {
+                    Token::Integer(n) => Backref::Number(n),
+                    Token::LiteralString(s) => Backref::Name(s),
+                    _ => return Err(ParseError::new(
+                        "Expected number or string literal for backreference",
+                        0, 0,
+                    )),
+                };
+                self.expect(Token::RParen)?;
+                Ok(Expr::Backref(backref))
+            }
+
+            // Negated char class
+            Token::Not => {
+                self.expect(Token::LParen)?;
+                let expr = self.parse_expression()?;
+                self.expect(Token::RParen)?;
+                Ok(Expr::NotCharClass(Box::new(expr)))
+            }
+
             // Quantifiers
             Token::OneOrMore
             | Token::ZeroOrMore
             | Token::Optional
             | Token::Exactly
             | Token::AtLeast
-            | Token::Between => self.parse_quantified(tok),
+            | Token::Between
+            | Token::OneOrMoreLazy
+            | Token::ZeroOrMoreLazy
+            | Token::OptionalLazy => self.parse_quantified(tok),
 
             // Groups
             Token::Group | Token::NonCapturing | Token::Named => self.parse_group(tok),
@@ -153,7 +190,16 @@ impl Parser {
                 let expr = self.parse_expression()?;
                 self.expect(Token::RParen)?;
                 Ok(Expr::Quantified {
-                    quantifier: Quantifier::OneOrMore,
+                    quantifier: QuantifierData { kind: QuantifierKind::OneOrMore, lazy: false },
+                    expr: Box::new(expr),
+                })
+            }
+            Token::OneOrMoreLazy => {
+                self.expect(Token::LParen)?;
+                let expr = self.parse_expression()?;
+                self.expect(Token::RParen)?;
+                Ok(Expr::Quantified {
+                    quantifier: QuantifierData { kind: QuantifierKind::OneOrMore, lazy: true },
                     expr: Box::new(expr),
                 })
             }
@@ -162,7 +208,16 @@ impl Parser {
                 let expr = self.parse_expression()?;
                 self.expect(Token::RParen)?;
                 Ok(Expr::Quantified {
-                    quantifier: Quantifier::ZeroOrMore,
+                    quantifier: QuantifierData { kind: QuantifierKind::ZeroOrMore, lazy: false },
+                    expr: Box::new(expr),
+                })
+            }
+            Token::ZeroOrMoreLazy => {
+                self.expect(Token::LParen)?;
+                let expr = self.parse_expression()?;
+                self.expect(Token::RParen)?;
+                Ok(Expr::Quantified {
+                    quantifier: QuantifierData { kind: QuantifierKind::ZeroOrMore, lazy: true },
                     expr: Box::new(expr),
                 })
             }
@@ -171,7 +226,16 @@ impl Parser {
                 let expr = self.parse_expression()?;
                 self.expect(Token::RParen)?;
                 Ok(Expr::Quantified {
-                    quantifier: Quantifier::Optional,
+                    quantifier: QuantifierData { kind: QuantifierKind::Optional, lazy: false },
+                    expr: Box::new(expr),
+                })
+            }
+            Token::OptionalLazy => {
+                self.expect(Token::LParen)?;
+                let expr = self.parse_expression()?;
+                self.expect(Token::RParen)?;
+                Ok(Expr::Quantified {
+                    quantifier: QuantifierData { kind: QuantifierKind::Optional, lazy: true },
                     expr: Box::new(expr),
                 })
             }
@@ -186,7 +250,7 @@ impl Parser {
                 let expr = self.parse_expression()?;
                 self.expect(Token::RParen)?;
                 Ok(Expr::Quantified {
-                    quantifier: Quantifier::Exactly(n),
+                    quantifier: QuantifierData { kind: QuantifierKind::Exactly(n), lazy: false },
                     expr: Box::new(expr),
                 })
             }
@@ -201,7 +265,7 @@ impl Parser {
                 let expr = self.parse_expression()?;
                 self.expect(Token::RParen)?;
                 Ok(Expr::Quantified {
-                    quantifier: Quantifier::AtLeast(n),
+                    quantifier: QuantifierData { kind: QuantifierKind::AtLeast(n), lazy: false },
                     expr: Box::new(expr),
                 })
             }
@@ -222,7 +286,7 @@ impl Parser {
                 let expr = self.parse_expression()?;
                 self.expect(Token::RParen)?;
                 Ok(Expr::Quantified {
-                    quantifier: Quantifier::Between(min, max),
+                    quantifier: QuantifierData { kind: QuantifierKind::Between(min, max), lazy: false },
                     expr: Box::new(expr),
                 })
             }

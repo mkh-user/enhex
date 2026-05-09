@@ -1,0 +1,2 @@
+# expect: ^[^\\"']+$
+start + one_or_more(not(backslash | "\"" | "'")) + end

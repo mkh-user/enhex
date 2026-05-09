@@ -1,0 +1,2 @@
+# expect: ^[^\da-zA-Z]+$
+start + one_or_more(not(digit | letter)) + end

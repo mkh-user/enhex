@@ -1,0 +1,2 @@
+# expect: ^[\w\.-]+@[\w-]+\.[a-z]{2,10}$
+start + one_or_more(word_char | dot | dash) + "@" + one_or_more(word_char | dash) + dot + tld() + end

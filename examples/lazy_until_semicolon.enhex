@@ -1,0 +1,2 @@
+# expect: ^;.*?;$
+start + ";" + zero_or_more_lazy(anything) + ";" + end

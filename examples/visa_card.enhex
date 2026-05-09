@@ -1,0 +1,2 @@
+# expect: ^4\d{15}$
+start + "4" + exactly(15, digit) + end

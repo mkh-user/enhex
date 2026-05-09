@@ -1,0 +1,2 @@
+# expect: ^\S$|^\S.*\S$
+(start + non_whitespace + end) | (start + non_whitespace + zero_or_more(anything) + non_whitespace + end)

@@ -1,0 +1,7 @@
+# expect: ^[\da-fA-F]{8}\-([\da-fA-F]{4}\-){3}[\da-fA-F]{12}$
+start
++ exactly(8, hex_digit)
++ dash
++ exactly(3, group(exactly(4, hex_digit) + dash))
++ exactly(12, hex_digit)
++ end

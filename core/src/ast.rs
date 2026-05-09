@@ -5,7 +5,7 @@ pub enum Expr {
     Sequence(Box<Expr>, Box<Expr>),
     Alternation(Box<Expr>, Box<Expr>),
     Quantified {
-        quantifier: Quantifier,
+        quantifier: QuantifierData,
         expr: Box<Expr>,
     },
     Group {
@@ -19,13 +19,18 @@ pub enum Expr {
         expr: Box<Expr>,
     },
     Preset(Preset),
+    Backref(Backref),
+    NotCharClass(Box<Expr>),
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Atom {
     Digit,
+    NonDigit,
     WordChar,
+    NonWordChar,
     Whitespace,
+    NonWhitespace,
     Lowercase,
     Uppercase,
     Letter,
@@ -34,10 +39,23 @@ pub enum Atom {
     Dash,
     Tab,
     Newline,
+    CarriageReturn,
+    HexDigit,
+    Null,
+    VerticalTab,
+    FormFeed,
+    Bell,
+    Backslash,
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum Quantifier {
+pub struct QuantifierData {
+    pub kind: QuantifierKind,
+    pub lazy: bool,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum QuantifierKind {
     OneOrMore,
     ZeroOrMore,
     Optional,
@@ -74,4 +92,10 @@ pub enum Preset {
     Email,
     Url,
     Ipv4,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum Backref {
+    Number(i64),
+    Name(String),
 }

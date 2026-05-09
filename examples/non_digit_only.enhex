@@ -1,0 +1,2 @@
+# expect: ^\D+$
+start + one_or_more(non_digit) + end

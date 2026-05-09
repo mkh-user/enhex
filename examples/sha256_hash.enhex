@@ -1,0 +1,2 @@
+# expect: ^[\da-fA-F]{64}$
+start + exactly(64, hex_digit) + end

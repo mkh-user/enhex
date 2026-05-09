@@ -131,6 +131,7 @@ enhex version
 | `dash` | Literal dash | `\-` |
 | `tab` | Literal tab | `\t` |
 | `newline` | Literal newline | `\n` |
+| `hex_digit` | Single hex digit (upper or lower) | `[\da-fA-F]` |
 
 ### Quantifiers
 
@@ -142,6 +143,9 @@ enhex version
 | `exactly(N, X)` | `X{N}` |
 | `at_least(N, X)` | `X{N,}` |
 | `between(N, M, X)` | `X{N,M}` |
+| `one_or_more_lazy(X)` | `X+?` |
+| `zero_or_more_lazy(X)` | `X*?` |
+| `optional_lazy(X)` | `X??` |
 
 ### Composition & Anchors
 
@@ -161,6 +165,7 @@ enhex version
 | `group(X)` | `(X)` |
 | `non_capturing(X)` | `(?:X)` |
 | `named("name", X)` | `(?P<name>X)` |
+| `not(X)` | `[^X]` |
 
 ### Lookaround
 
@@ -170,6 +175,13 @@ enhex version
 | `not_followed_by(X)` | `(?!X)` |
 | `preceded_by(X)` | `(?<=X)` |
 | `not_preceded_by(X)` | `(?<!X)` |
+
+### Backreferences
+
+| EnhEx | Regex Equivalent |
+|:------|:-----------------|
+| `backref(1)` | `\1` |
+| `backref("name")` | `(?P=name)` |
 
 ### Built-in Presets
 
@@ -213,9 +225,9 @@ enhex/
 ## Roadmap
 
 - [x] Language specification
-- [ ] Rust core engine + WASM
-- [ ] Python binding
-- [ ] CLI tool
+- [x] Rust core engine + WASM
+- [x] Python binding
+- [x] CLI tool
 - [ ] JavaScript/TypeScript binding
 - [ ] VSCode extension (syntax highlighting + live preview)
 - [ ] Web playground

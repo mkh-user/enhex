@@ -1,0 +1,2 @@
+# expect: ^[\da-fA-F]{2}(?:\-[\da-fA-F]{2})*$
+start + exactly(2, hex_digit) + zero_or_more(dash + exactly(2, hex_digit)) + end

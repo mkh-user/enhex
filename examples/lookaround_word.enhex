@@ -1,0 +1,2 @@
+# expect: ^(?<=pre)[a-zA-Z]+(?!ing)$
+start + preceded_by("pre") + one_or_more(letter) + not_followed_by("ing") + end

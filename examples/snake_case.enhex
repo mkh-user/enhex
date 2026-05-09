@@ -1,0 +1,2 @@
+# expect: ^[a-z\d]+(?:_[a-z\d]+)*$
+start + one_or_more(lowercase | digit) + zero_or_more("_" + one_or_more(lowercase | digit)) + end

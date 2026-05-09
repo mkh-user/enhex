@@ -6,7 +6,7 @@
 
 ## 1. Overview
 
-EnhEx (Enhanced Expression) is a human-readable language for defining text patterns. 
+EnhEx (Enhanced Expression) is a human-readable language for defining text patterns.
 It compiles to standard Regex that works in any Regex engine.
 
 ### Design Principles
@@ -45,8 +45,11 @@ Atoms are the smallest building blocks. Each maps directly to a Regex character 
 ### Syntax
 ```
 atom := 'digit'
+      | 'non_digit'
       | 'word_char'
+      | 'non_word_char'
       | 'whitespace'
+      | 'non_whitespace'
       | 'lowercase'
       | 'uppercase'
       | 'letter'
@@ -55,15 +58,25 @@ atom := 'digit'
       | 'dash'
       | 'tab'
       | 'newline'
+      | 'carriage_return'
+      | 'hex_digit'
+      | 'null'
+      | 'vertical_tab'
+      | 'form_feed'
+      | 'bell'
+      | 'backslash'
 ```
 
 ### Translation Table
 
-| Atom | Description | Regex |
+| EnhEx | Description | Regex Equivalent |
 |:---|:---|:---|
 | `digit` | Any digit 0–9 | `\d` |
+| `non_digit` | Any non-digit | `\D` |
 | `word_char` | Letter, digit, or underscore | `\w` |
+| `non_word_char` | Any non-word character | `\W` |
 | `whitespace` | Space, tab, or newline | `\s` |
+| `non_whitespace` | Any non-whitespace | `\S` |
 | `lowercase` | Lowercase letters a–z | `[a-z]` |
 | `uppercase` | Uppercase letters A–Z | `[A-Z]` |
 | `letter` | Any letter a–z or A–Z | `[a-zA-Z]` |
@@ -72,6 +85,48 @@ atom := 'digit'
 | `dash` | Literal hyphen character | `\-` |
 | `tab` | Literal tab character | `\t` |
 | `newline` | Literal newline character | `\n` |
+| `carriage_return` | Literal carriage return | `\r` |
+| `hex_digit` | Any hex digit 0-9, a-f, A-F | `[\da-fA-F]` |
+| `null` | Null character (ASCII 0) | `\0` |
+| `vertical_tab` | Vertical tab character | `\v` |
+| `form_feed` | Form feed character | `\f` |
+| `bell` | Bell character (ASCII 7) | `\a` |
+| `backslash` | Literal backslash character | `\\` |
+
+### Character Class Integration
+
+These atoms can all be used inside `not()` and in alternations for character class generation:
+
+```
+# Non-whitespace character class
+non_whitespace # -> \S
+
+# Any non-digit, non-letter
+not(digit | letter) # -> [^\da-zA-Z]
+
+# Whitespace or newline alternatives
+whitespace | carriage_return # -> [\s\r]
+```
+
+### Negated Atom Shorthands
+
+For the three standard negated shorthands (`\D`, `\W`, `\S`), `EnhEx` provides direct atoms so you don't need to write `not(digit)`:
+
+| EnhEx | RegEx | Equivalent `not()` Form | Regex |
+|:---|:---|:---|:---|
+| `non_digit` | `\D` | `not(digit)` | `[^\d]` |
+| `non_word_char` | `\W` | `not(word_char)` | `[^\w]` |
+| `non_whitespace` | `\S` | `not(whitespace)` | `[^\s]` |
+
+**Recommendation:** Use the direct atom when you just need the negated shorthand. Use `not(...)` when you want to negate a custom character class:
+
+```
+# Use direct atom for standard negation
+non_whitespace # -> \S
+
+# Use not() for custom negation
+not(digit | letter | "_") # -> [^\da-zA-Z_]
+```
 
 ---
 
@@ -79,7 +134,7 @@ atom := 'digit'
 
 A literal is any text enclosed in double quotes. It is treated as an exact string to match.
 
-Characters with special meaning in Regex (`.`, `+`, `*`, `?`, `[`, `]`, `(`, `)`, `/`, etc.) 
+Characters with special meaning in Regex (`.`, `+`, `*`, `?`, `[`, `]`, `(`, `)`, `/`, etc.)
 are **automatically escaped** in the output.
 
 ### Syntax
@@ -101,16 +156,19 @@ literal := '"' <characters> '"'
 
 ## 5. Quantifiers
 
-Quantifiers specify how many times an expression should repeat.
+Quantifiers specify how many times an expression should repeat. Lazy quantifiers match the **shortest** possible string instead of the longest; Use them when you want to stop at the first match rather than the last.
 
 ### Syntax
 ```
-quantifier := 'one_or_more'  '(' expression ')'
-            | 'zero_or_more' '(' expression ')'
-            | 'optional'     '(' expression ')'
-            | 'exactly'      '(' integer ',' expression ')'
-            | 'at_least'     '(' integer ',' expression ')'
-            | 'between'      '(' integer ',' integer ',' expression ')'
+quantifier := 'one_or_more'       '(' expression ')'
+            | 'zero_or_more'      '(' expression ')'
+            | 'optional'          '(' expression ')'
+            | 'exactly'           '(' integer ',' expression ')'
+            | 'at_least'          '(' integer ',' expression ')'
+            | 'between'           '(' integer ',' integer ',' expression ')'
+            | 'one_or_more_lazy'  '(' expression ')'
+            | 'zero_or_more_lazy' '(' expression ')'
+            | 'optional_lazy'     '(' expression ')'
 ```
 
 ### Translation Table
@@ -123,6 +181,9 @@ quantifier := 'one_or_more'  '(' expression ')'
 | `exactly(N, X)` | `X{N}` | Exactly N times |
 | `at_least(N, X)` | `X{N,}` | N or more |
 | `between(N, M, X)` | `X{N,M}` | Between N and M times |
+| `one_or_more_lazy(X)` | `X+?` | One or more (lazy) |
+| `zero_or_more_lazy(X)` | `X*?` | Zero or more (lazy) |
+| `optional_lazy(X)` | `X??` | Zero or one (lazy) |
 
 ### Examples
 
@@ -133,6 +194,8 @@ quantifier := 'one_or_more'  '(' expression ')'
 | `between(2, 5, letter)` | `[a-zA-Z]{2,5}` |
 | `optional(dash)` | `\-?` |
 | `zero_or_more(anything)` | `.*` |
+| `one_or_more_lazy(digit)` | `\d+?` |
+| `zero_or_more_lazy(anything)` | `.*?` |
 
 ---
 
@@ -193,6 +256,7 @@ Groups wrap expressions for capturing, non-capturing, or naming purposes.
 group := 'group'          '(' expression ')'
        | 'non_capturing'  '(' expression ')'
        | 'named'          '(' string_literal ',' expression ')'
+       | 'not'            '(' expression ')'
 ```
 
 ### Translation Table
@@ -202,6 +266,7 @@ group := 'group'          '(' expression ')'
 | `group(X)` | `(X)` | Capturing group |
 | `non_capturing(X)` | `(?:X)` | Non-capturing group |
 | `named("name", X)` | `(?P<name>X)` | Named capturing group |
+| `not(X)` | `[^X]` | Negated character class |
 
 ### Examples
 
@@ -210,6 +275,7 @@ group := 'group'          '(' expression ')'
 | `group(digit \| letter)` | `(\d\|[a-zA-Z])` |
 | `non_capturing(dot + digit)` | `(?:\.\d)` |
 | `named("area", exactly(3, digit))` | `(?P<area>\d{3})` |
+| `not(lowercase)` | `[^a-z]` |
 
 ---
 
@@ -272,7 +338,33 @@ lookaround := 'followed_by'      '(' expression ')'
 
 ---
 
-## 11. Presets
+## 11. Backreference
+
+A backreference matches the same text that was matched by a capturing group earlier in the pattern.
+
+### Syntax
+```
+backref := 'backref' '(' string_literal ')'
+         | 'backref' '(' integer ')'
+```
+
+### Translation Table
+
+| EnhEx | Regex Equivalent |
+|:---|:---|
+| `backref(i)` | `\i` |
+| `backref("X")` | `(?P=X)` |
+
+### Examples
+
+| EnhEx | Regex |
+|:---|:---|
+| `start + group(digit) + "-" + backref(1) + end` | `^(\d)-\1$` |
+| `start + named("tag", one_or_more(word_char)) + ">" + zero_or_more(anything) + "</" + backref("tag") + ">" + end` | `^(?P<tag>\w+)>.*</(?P=tag)>$` |
+
+---
+
+## 12. Presets
 
 Presets are named, built-in patterns for common use cases.
 They expand to their full Regex equivalent at compile time.
@@ -305,7 +397,7 @@ start + ipv4() + ":" + one_or_more(digit) + end
 
 ---
 
-## 12. Operator Precedence
+## 13. Operator Precedence
 
 From highest to lowest priority:
 
@@ -316,19 +408,20 @@ From highest to lowest priority:
 | 3 | Alternation (`\|`) |
 | 4 (lowest) | Sequence (`+`) |
 
-Use `group(...)` to override precedence when needed.
+Use `group(...)` to override **RegEx** precedence when needed. `(...)` can be
+used to override **EnhEx** precedence.
 
 ### Example
 
 ```
 # These are different:
-digit | letter + digit       → \d|[a-zA-Z]\d
+digit | letter + digit        → \d|[a-zA-Z]\d
 group(digit | letter) + digit → (\d|[a-zA-Z])\d
 ```
 
 ---
 
-## 13. Whitespace
+## 14. Whitespace
 
 Whitespace characters (spaces, tabs, newlines) **are ignored** between tokens,
 except inside literal strings.
@@ -347,7 +440,7 @@ digit
 
 ---
 
-## 14. Comments
+## 15. Comments
 
 Comments begin with `#` and continue to the end of the line.
 They are ignored by the compiler.
@@ -361,7 +454,7 @@ comment := '#' <any character except newline> <newline>
 
 ```
 # This is a valid email pattern
-start 
+start
     + one_or_more(word_char | dot | dash)  # local part
     + "@"                                   # at sign
     + one_or_more(word_char | dash)         # domain
@@ -372,7 +465,7 @@ start
 
 ---
 
-## 15. Complete Grammar (EBNF)
+## 16. Complete Grammar (EBNF)
 
 ```ebnf
 (* Top level *)
@@ -392,6 +485,7 @@ term := atom
       | group
       | anchor
       | lookaround
+      | backref
       | preset
       | '(' expression ')'
 
@@ -407,6 +501,7 @@ atom := 'digit'
       | 'dash'
       | 'tab'
       | 'newline'
+      | 'hex_digit'
 
 (* Literals *)
 literal := '"' {character - '"'} '"'
@@ -420,11 +515,15 @@ quantified := quantifier_name '(' expression ')'
 quantifier_name := 'one_or_more'
                  | 'zero_or_more'
                  | 'optional'
+                 | 'one_or_more_lazy'
+                 | 'zero_or_more_lazy'
+                 | 'optional_lazy'
 
 (* Groups *)
 group := 'group'          '(' expression ')'
        | 'non_capturing'  '(' expression ')'
        | 'named'          '(' string_literal ',' expression ')'
+       | 'not'            '(' expression ')'
 
 (* Anchors *)
 anchor := 'start'
@@ -436,6 +535,10 @@ lookaround := 'followed_by'      '(' expression ')'
             | 'not_followed_by'  '(' expression ')'
             | 'preceded_by'      '(' expression ')'
             | 'not_preceded_by'  '(' expression ')'
+
+(* Backref *)
+backref := 'backref' '(' string_literal ')'
+         | 'backref' '(' integer ')'
 
 (* Presets *)
 preset := 'tld'   '(' ')'
@@ -450,7 +553,7 @@ string_literal := '"' {character - '"'} '"'
 
 ---
 
-## 16. Example Patterns
+## 17. Example Patterns
 
 ### Email Address
 ```
@@ -490,7 +593,7 @@ start + between(3, 16, word_char) + end
 
 ---
 
-## 17. Error Handling
+## 18. Error Handling
 
 The compiler must produce clear, human-readable errors.
 

@@ -2,8 +2,11 @@
 pub enum Token {
     // Atoms
     Digit,
+    NonDigit,
     WordChar,
+    NonWordChar,
     Whitespace,
+    NonWhitespace,
     Lowercase,
     Uppercase,
     Letter,
@@ -12,6 +15,13 @@ pub enum Token {
     Dash,
     Tab,
     Newline,
+    HexDigit,
+    CarriageReturn,
+    Null,
+    VerticalTab,
+    FormFeed,
+    Bell,
+    Backslash,
 
     // Quantifiers
     OneOrMore,
@@ -20,6 +30,9 @@ pub enum Token {
     Exactly,
     AtLeast,
     Between,
+    OneOrMoreLazy,
+    ZeroOrMoreLazy,
+    OptionalLazy,
 
     // Groups
     Group,
@@ -36,6 +49,12 @@ pub enum Token {
     NotFollowedBy,
     PrecededBy,
     NotPrecededBy,
+
+    // Backreference
+    Backref,
+
+    // Negated char class
+    Not,
 
     // Presets
     Tld,

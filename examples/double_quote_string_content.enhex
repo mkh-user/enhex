@@ -1,0 +1,2 @@
+# expect: ^[^"\\]*(?:\\.[^"\\]*)*$
+start + zero_or_more(not("\"" | "\\")) + zero_or_more(backslash + anything + zero_or_more(not("\"" | "\\"))) + end

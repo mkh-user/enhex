@@ -1,0 +1,2 @@
+# expect: ^[a-z][a-zA-Z]*$
+start + lowercase + zero_or_more(letter) + end

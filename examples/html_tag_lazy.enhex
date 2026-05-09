@@ -1,0 +1,2 @@
+# expect: ^<(\w+)>.*?</\1>$
+start + "<" + group(one_or_more(word_char)) + ">" + zero_or_more_lazy(anything) + "</" + backref(1) + ">" + end

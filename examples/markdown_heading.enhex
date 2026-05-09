@@ -1,0 +1,2 @@
+# expect: ^#{1,6} .+$
+start + between(1, 6, "#") + " " + one_or_more(anything) + end

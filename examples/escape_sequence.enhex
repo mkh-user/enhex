@@ -1,0 +1,2 @@
+# expect: ^\\(?:[nrt\\]|x[\da-fA-F]{2})$
+start + backslash + non_capturing(("n" | "r" | "t" | backslash) | ("x" + exactly(2, hex_digit))) + end

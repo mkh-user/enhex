@@ -1,0 +1,2 @@
+# expect: ^[A-Z]:\\[ \w\\]+$
+start + uppercase + ":" + backslash + one_or_more(" " | word_char | backslash) + end

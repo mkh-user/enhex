@@ -1,0 +1,5 @@
+# expect: ^(?:[\da-fA-F]{1,4}:){7}[\da-fA-F]{1,4}$
+start
++ exactly(7, non_capturing(between(1, 4, hex_digit) + ":"))
++ between(1, 4, hex_digit)
++ end

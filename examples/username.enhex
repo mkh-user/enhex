@@ -1,0 +1,2 @@
+# expect: ^\w{3,16}$
+start + between(3, 16, word_char) + end

@@ -1,0 +1,10 @@
+# expect: ^https?://[\w\.-]+\.[a-z]{2,10}(?:/.*)?$
+start
++ "http"
++ optional("s")
++ "://"
++ one_or_more(word_char | dot | dash)
++ dot
++ tld()
++ optional("/" + zero_or_more(anything))
++ end
