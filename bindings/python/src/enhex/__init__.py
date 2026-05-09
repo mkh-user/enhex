@@ -12,4 +12,4 @@ def compile_file(path: str) -> str:
     with open(path, 'r', encoding='utf-8') as f:
         return compile(f.read())
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
