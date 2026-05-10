@@ -1,0 +1,33 @@
+name: Publish JavaScript to npm
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build WASM
+        working-directory: core
+        run: wasm-pack build --target nodejs --out-dir pkg --out-name enhex-core
+
+      - name: Copy WASM files
+        working-directory: bindings/js
+        run: node scripts/copy-wasm.js
+
+      - name: Publish to npm
+        working-directory: bindings/js
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

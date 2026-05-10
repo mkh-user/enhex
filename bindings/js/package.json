@@ -1,0 +1,40 @@
+{
+  "name": "enhex",
+  "version": "0.2.0",
+  "description": "EnhEx - Enhanced Expression. Write readable patterns, get Regex.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mkh-user/enhex"
+  },
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js",
+      "require": "./src/index.cjs"
+    }
+  },
+  "files": [
+    "src/",
+    "pkg/"
+  ],
+  "keywords": [
+    "regex",
+    "dsl",
+    "enhex",
+    "pattern",
+    "compiler",
+    "enhanced-expression"
+  ],
+  "scripts": {
+    "build": "node scripts/copy-wasm.js",
+    "test": "node --test src/*.test.js",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

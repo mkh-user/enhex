@@ -5,6 +5,9 @@ pub mod lexer;
 pub mod parser;
 pub mod token;
 
+#[cfg(target_arch = "wasm32")]
+pub mod wasm;
+
 use parser::Parser;
 use codegen::generate;
 

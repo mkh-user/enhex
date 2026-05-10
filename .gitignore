@@ -15,6 +15,10 @@ dist/
 build/
 *.whl
 
+# JavaScript
+bindings/js/pkg/
+bindings/js/node_modules/
+
 # Maturin
 bindings/python/.github/
 
