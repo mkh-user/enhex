@@ -66,6 +66,10 @@ pub enum Token {
     Integer(i64),
     LiteralString(String),
 
+    // RegEx
+    RegexFunc,
+    RegexLiteral(String),
+
     // Operators
     Plus,
     Pipe,

@@ -183,6 +183,13 @@ enhex version
 | `backref(1)` | `\1` |
 | `backref("name")` | `(?P=name)` |
 
+### Raw Regex Literal
+
+| EnhEx | Regex |
+|:---|:---|
+| `regex("\\d{3}-\\d{4}")` | `\d{3}-\d{4}` |
+| `` `/[\w\.-]+@[\w-]+\.[a-z]{2,10}/` `` | `[\w\.-]+@[\w-]+\.[a-z]{2,10}` |
+
 ### Built-in Presets
 
 | EnhEx | Matches |

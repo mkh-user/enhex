@@ -106,6 +106,21 @@ impl Parser {
             // Literal string
             Token::LiteralString(s) => Ok(Expr::Literal(s)),
 
+            // Literal RegEx
+            Token::RegexLiteral(s) => Ok(Expr::RawRegex(s)),
+
+            // regex()
+            Token::RegexFunc => {
+                self.expect(Token::LParen)?;
+                let tok = self.next_token()?;
+                let s = match tok {
+                    Token::LiteralString(s) => s,
+                    _ => return Err(ParseError::new("Expected string literal", 0, 0)),
+                };
+                self.expect(Token::RParen)?;
+                Ok(Expr::RegexCall(s))
+            }
+
             // Backreference
             Token::Backref => {
                 self.expect(Token::LParen)?;

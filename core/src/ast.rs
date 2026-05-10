@@ -21,6 +21,8 @@ pub enum Expr {
     Preset(Preset),
     Backref(Backref),
     NotCharClass(Box<Expr>),
+    RawRegex(String),
+    RegexCall(String),
 }
 
 #[derive(Debug, Clone, PartialEq)]

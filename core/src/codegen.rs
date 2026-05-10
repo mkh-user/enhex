@@ -12,6 +12,8 @@ pub fn generate(expr: &Expr) -> String {
                 None => format!("{}|{}", generate(left), generate(right)),
             }
         }
+        Expr::RawRegex(s) => s.clone(),
+        Expr::RegexCall(s) => s.clone(),
         Expr::Quantified { quantifier, expr } => {
             let inner = generate(expr);
             let suffix = match &quantifier.kind {

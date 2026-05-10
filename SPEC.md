@@ -154,7 +154,18 @@ literal := '"' <characters> '"'
 
 ---
 
-## 5. Quantifiers
+## 5. Raw Regex Literal / `regex()` Identifier
+
+| EnhEx | Regex |
+|:---|:---|
+| `regex("\\d{3}-\\d{4}")` | `\d{3}-\d{4}` |
+| `` `/[\w\.-]+@[\w-]+\.[a-z]{2,10}/` `` | `[\w\.-]+@[\w-]+\.[a-z]{2,10}` |
+
+Raw regex literals are useful when you need to embed a complex existing regex directly without converting it to EnhEx syntax. The `regex("...")` form takes a string (where backslashes must be escaped), while the `/.../` form takes a literal regex (where **no escaping is needed** unless you need to include a literal `/` or `\`).
+
+---
+
+## 6. Quantifiers
 
 Quantifiers specify how many times an expression should repeat. Lazy quantifiers match the **shortest** possible string instead of the longest; Use them when you want to stop at the first match rather than the last.
 
@@ -199,7 +210,7 @@ quantifier := 'one_or_more'       '(' expression ')'
 
 ---
 
-## 6. Sequence
+## 7. Sequence
 
 A sequence chains expressions together with `+`, meaning "this followed by that."
 
@@ -223,7 +234,7 @@ sequence := expression ('+' expression)+
 
 ---
 
-## 7. Alternation
+## 8. Alternation
 
 Alternation expresses "or" between expressions using `|`.
 
@@ -247,7 +258,7 @@ Use `group(...)` to override precedence when needed.
 
 ---
 
-## 8. Groups
+## 9. Groups
 
 Groups wrap expressions for capturing, non-capturing, or naming purposes.
 
@@ -279,7 +290,7 @@ group := 'group'          '(' expression ')'
 
 ---
 
-## 9. Anchors
+## 10. Anchors
 
 Anchors match positions within a string, not characters.
 
@@ -307,7 +318,7 @@ anchor := 'start'
 
 ---
 
-## 10. Lookaround
+## 11. Lookaround
 
 Lookaround expressions assert conditions before or after the current position
 without consuming characters.
@@ -338,7 +349,7 @@ lookaround := 'followed_by'      '(' expression ')'
 
 ---
 
-## 11. Backreference
+## 12. Backreference
 
 A backreference matches the same text that was matched by a capturing group earlier in the pattern.
 
@@ -364,7 +375,7 @@ backref := 'backref' '(' string_literal ')'
 
 ---
 
-## 12. Presets
+## 13. Presets
 
 Presets are named, built-in patterns for common use cases.
 They expand to their full Regex equivalent at compile time.
@@ -397,7 +408,7 @@ start + ipv4() + ":" + one_or_more(digit) + end
 
 ---
 
-## 13. Operator Precedence
+## 14. Operator Precedence
 
 From highest to lowest priority:
 
@@ -421,7 +432,7 @@ group(digit | letter) + digit → (\d|[a-zA-Z])\d
 
 ---
 
-## 14. Whitespace
+## 15. Whitespace
 
 Whitespace characters (spaces, tabs, newlines) **are ignored** between tokens,
 except inside literal strings.
@@ -440,7 +451,7 @@ digit
 
 ---
 
-## 15. Comments
+## 16. Comments
 
 Comments begin with `#` and continue to the end of the line.
 They are ignored by the compiler.
@@ -465,7 +476,7 @@ start
 
 ---
 
-## 16. Complete Grammar (EBNF)
+## 17. Complete Grammar (EBNF)
 
 ```ebnf
 (* Top level *)
@@ -481,6 +492,7 @@ alternation := sequence ('|' sequence)*
 
 term := atom
       | literal
+      | regex
       | quantified
       | group
       | anchor
@@ -505,6 +517,10 @@ atom := 'digit'
 
 (* Literals *)
 literal := '"' {character - '"'} '"'
+
+(* RegEx Literals *)
+regex := '/' {character - '/'} '/'
+       | 'regex' '(' literal ')'
 
 (* Quantifiers *)
 quantified := quantifier_name '(' expression ')'
@@ -553,7 +569,7 @@ string_literal := '"' {character - '"'} '"'
 
 ---
 
-## 17. Example Patterns
+## 18. Example Patterns
 
 ### Email Address
 ```
@@ -593,7 +609,7 @@ start + between(3, 16, word_char) + end
 
 ---
 
-## 18. Error Handling
+## 19. Error Handling
 
 The compiler must produce clear, human-readable errors.
 

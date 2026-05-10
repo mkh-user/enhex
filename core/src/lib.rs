@@ -363,4 +363,20 @@ mod tests {
         ).unwrap();
         assert_eq!(regex, r"^([a-zA-Z])\1+$");
     }
+
+    #[test]
+    fn test_regex_literal() {
+        let regex = compile(
+            r#"/[\w\.-]+@[\w-]+\.[a-z]{2,10}/"#
+        ).unwrap();
+        assert_eq!(regex, r"[\w\.-]+@[\w-]+\.[a-z]{2,10}")
+    }
+
+    #[test]
+    fn test_regex_func() {
+        let regex = compile(
+            r#"regex("\\d{3}-\\d{4}")"#
+        ).unwrap();
+        assert_eq!(regex, r"\d{3}-\d{4}")
+    }
 }

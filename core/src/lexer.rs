@@ -22,6 +22,10 @@ impl Lexer {
         self.chars.get(self.pos).copied()
     }
 
+    fn peek_next(&self) -> Option<char> {
+        self.chars.get(self.pos + 1).copied()
+    }
+
     fn advance(&mut self) -> Option<char> {
         let ch = self.chars.get(self.pos).copied();
         if let Some(c) = ch {
@@ -112,6 +116,43 @@ impl Lexer {
         s.parse().unwrap_or(0)
     }
 
+    fn read_regex_literal(&mut self) -> Result<String, ParseError> {
+        self.advance(); // skip opening `/`
+        let mut result = String::new();
+        while let Some(ch) = self.peek() {
+            match ch {
+                '/' => {
+                    self.advance(); // skip closing `/`
+                    // Read flags
+                    let flags = self.read_identifier();
+                    if !flags.is_empty() {
+                        return Ok(format!("(?{}){}", flags, result));
+                    }
+                    return Ok(result);
+                }
+                '\\' => {
+                    // Escaped slash or backslash inside regex
+                    self.advance();
+                    match self.peek() {
+                        Some('/') => result.push('/'),
+                        Some('\\') => result.push('\\'),
+                        Some(c) => {
+                            result.push('\\');
+                            result.push(c);
+                        }
+                        None => break,
+                    }
+                    self.advance();
+                }
+                _ => {
+                    result.push(ch);
+                    self.advance();
+                }
+            }
+        }
+        Err(ParseError::new("Unclosed regex literal", self.line, self.col))
+    }
+
     pub fn next_token(&mut self) -> Result<Token, ParseError> {
         self.skip_whitespace();
 
@@ -148,6 +189,15 @@ impl Lexer {
             ')' => {
                 self.advance();
                 Ok(Token::RParen)
+            }
+            '/' => {
+                if let Some(next) = self.peek_next() {
+                    if !next.is_whitespace() && next != '+' && next != '|' && next != ',' {
+                        let s = self.read_regex_literal()?;
+                        return Ok(Token::RegexLiteral(s));
+                    }
+                }
+                Err(ParseError::new("Unexpected '/'", self.line, self.col))
             }
             '"' => {
                 let s = self.read_string()?;
@@ -215,6 +265,9 @@ impl Lexer {
 
                     // Negated char class
                     "not" => Token::Not,
+
+                    // RegEx
+                    "regex" => Token::RegexFunc,
 
                     // Presets
                     "tld" => Token::Tld,
