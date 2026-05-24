@@ -16,6 +16,12 @@ EnhEx fixes this:
 - **Compile** to standard Regex that works everywhere
 - **One core**, written in Rust, compiled to WASM — runs identically in every language
 
+### Language Support Status:
+
+- Rust: ✅ Native
+- Python: ✅ `enhex` at PyPI with WASM
+- JavaScript: ⚠️ No NPM package, with WASM
+
 ---
 
 ## Quick Example
@@ -46,9 +52,9 @@ pip install enhex
 cargo install enhex-core
 ```
 
-### JavaScript / TypeScript
+### JavaScript / TypeScript - Currently unavailable!
 ```bash
-npm install enhex
+#npm install enhex
 ```
 
 ### CLI (via Python)
@@ -79,6 +85,10 @@ if re.match(pattern, "09123456789"):
 ```
 
 ### JavaScript
+
+> [!Important]
+> Due to some limitations, **EnhEx isn't available at NPM currently**. Please use it in other ways or build package from source until NPM piblish.
+
 ```javascript
 import { compile } from 'enhex';
 
@@ -188,7 +198,7 @@ enhex version
 | EnhEx | Regex |
 |:---|:---|
 | `regex("\\d{3}-\\d{4}")` | `\d{3}-\d{4}` |
-| `` `/[\w\.-]+@[\w-]+\.[a-z]{2,10}/` `` | `[\w\.-]+@[\w-]+\.[a-z]{2,10}` |
+| `/[\w\.-]+@[\w-]+\.[a-z]{2,10}/` | `[\w\.-]+@[\w-]+\.[a-z]{2,10}` |
 
 ### Built-in Presets
 
