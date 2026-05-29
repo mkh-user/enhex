@@ -3,7 +3,7 @@ name: Publish JavaScript to npm
 on:
   push:
     tags:
-      - 'v*'
+      - 'js-v*'
   workflow_dispatch:
 
 permissions:
