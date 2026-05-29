@@ -26,6 +26,9 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Install wasm-pack
+        uses: jetli/wasm-pack-action@v0.4.0
+
       - name: Build WASM
         working-directory: core
         run: wasm-pack build --target nodejs --out-dir pkg --out-name enhex-core
@@ -34,13 +37,16 @@ jobs:
         working-directory: bindings/js
         run: node scripts/copy-wasm.js
 
-      - name: Setup npn CI
+      - name: Setup npm CI
+        working-directory: bindings/js
         run: npm ci
 
       - name: Build JS Binding
+        working-directory: bindings/js
         run: npm run build --if-present
 
       - name: Test JS Package
+        working-directory: bindings/js
         run: npm test
 
       - name: Publish to npm
