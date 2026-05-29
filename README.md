@@ -20,7 +20,7 @@ EnhEx fixes this:
 
 - Rust: ✅ Native
 - Python: ✅ `enhex` at PyPI with WASM
-- JavaScript: ⚠️ No NPM package, with WASM
+- JavaScript: ✅ `enhexjs` at NPM with WASM
 
 ---
 
@@ -52,9 +52,9 @@ pip install enhex
 cargo install enhex-core
 ```
 
-### JavaScript / TypeScript - Currently unavailable!
+### JavaScript / TypeScript
 ```bash
-#npm install enhex
+npm install enhexjs
 ```
 
 ### CLI (via Python)
@@ -86,11 +86,8 @@ if re.match(pattern, "09123456789"):
 
 ### JavaScript
 
-> [!Important]
-> Due to some limitations, **EnhEx isn't available at NPM currently**. Please use it in other ways or build package from source until NPM piblish.
-
 ```javascript
-import { compile } from 'enhex';
+import { compile } from 'enhexjs';
 
 const pattern = compile('start + one_or_more(digit) + end');
 const regex = new RegExp(pattern);
@@ -245,7 +242,7 @@ enhex/
 - [x] Rust core engine + WASM
 - [x] Python binding
 - [x] CLI tool
-- [ ] JavaScript/TypeScript binding
+- [x] JavaScript/TypeScript binding
 - [ ] VSCode extension (syntax highlighting + live preview)
 - [ ] Web playground
 
