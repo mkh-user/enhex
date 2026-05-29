@@ -30,7 +30,7 @@ jobs:
         working-directory: core
         run: wasm-pack build --target nodejs --out-dir pkg --out-name enhex-core
 
-      - name: Copy WASM files
+      - name: Copy WASM & meta files
         working-directory: bindings/js
         run: node scripts/copy-wasm.js
 

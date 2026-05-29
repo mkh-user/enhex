@@ -6,6 +6,9 @@ on:
       - 'core-v*'
   workflow_dispatch:
 
+permissions:
+  id-token: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -15,9 +18,16 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Copy README
-        run: cp README.md core/README.md
+      - name: Copy README & LICENSE
+        run: |
+          cp README.md core/README.md
+          cp LICENSE core/LICENSE
+
+      - uses: rust-lang/crates-io-auth-action@v1
+        id: auth
 
       - name: Publish to crates.io
         working-directory: core
-        run: cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
+        run: cargo publish
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}

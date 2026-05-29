@@ -24,7 +24,6 @@ for (const file of files) {
     const dest = join(destDir, file);
     if (existsSync(src)) {
         copyFileSync(src, dest);
-        console.log(`Copied ${file}`);
     } else {
         console.warn(`Warning: ${file} not found in ${sourceDir}`);
     }
@@ -34,7 +33,23 @@ const oldPath = join(destDir, 'enhex-core.js');
 const newPath = join(destDir, 'enhex-core.cjs');
 if (existsSync(oldPath)) {
     renameSync(oldPath, newPath);
-    console.log('Renamed enhex-core.js → enhex-core.cjs');
 }
 
 console.log('WASM files copied successfully.');
+
+const meta_files = [
+    'LICENSE',
+    'README.md',
+]
+
+for (const file of meta_files) {
+    const src = join(rootDir, '..', '..', file);
+    const dest = join(rootDir, file);
+    if (existsSync(join(src))) {
+        copyFileSync(src, dest);
+    } else {
+        console.warn(`Warning: ${file} not found in ${join(rootDir, '..', '..')}`);
+    }
+}
+
+console.log('Meta files copied successfully.')

@@ -1,6 +1,6 @@
 [project]
 name = "enhex"
-version = "0.2.0"
+version = "0.3.0"
 description = "EnhEx - Enhanced Expression. Write readable patterns, get Regex."
 readme = "README.md"
 requires-python = ">=3.8"

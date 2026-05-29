@@ -28,7 +28,7 @@ EnhEx fixes this:
 
 ### EnhEx Input
 ```
-start + one_or_more(word_char | dot | dash) + "@" + one_or_more(word_char | dash) + "." + tld() + end
+start + one_or_more(word_char | dot | dash) + "@" + one_or_more(word_char | dash) + dot + tld() + end
 ```
 
 ### Regex Output
@@ -76,12 +76,12 @@ import enhex as ex
 pattern = ex.compile('start + one_or_more(digit) + end')
 
 # Compile from a .enhex file
-pattern = ex.compile_file('phone.enhex')
+phone_pattern = ex.compile_file('phone.enhex')
 
 # Use with standard re module
 import re
-if re.match(pattern, "09123456789"):
-    print("Valid phone number!")
+if re.match(pattern, "367812009"):
+    print("Valid number!")
 ```
 
 ### JavaScript
@@ -95,6 +95,14 @@ const regex = new RegExp(pattern);
 if (regex.test('12345')) {
     console.log('Only digits!');
 }
+
+// Or automatic RegExp creation:
+const re = compileRegExp('start + one_or_more(digit) + end');
+
+if (re.test('12345')) {
+    console.log('Only digits!');
+}
+
 ```
 
 ### Rust

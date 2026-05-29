@@ -4,7 +4,9 @@ bindings/python/target/
 
 # Publish Duplicates
 bindings/*/README.md
+bindings/*/LICENSE
 core/README.md
+core/LICENSE
 
 # Python
 __pycache__/

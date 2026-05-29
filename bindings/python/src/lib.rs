@@ -13,6 +13,5 @@ fn compile(_py: Python<'_>, pattern: &str) -> PyResult<String> {
 #[pymodule]
 fn _enhex(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(compile, m)?)?;
-    m.add("__version__", "0.1.0")?;
     Ok(())
 }
