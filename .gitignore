@@ -1,33 +1,37 @@
 # Rust
 core/target/
-bindings/python/target/
-
-# Publish Duplicates
-bindings/*/README.md
-bindings/*/LICENSE
-core/README.md
-core/LICENSE
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.egg-info/
-dist/
-build/
-*.whl
+core/pkg
 
 # JavaScript
-bindings/js/pkg/
 bindings/js/node_modules/
+bindings/js/pkg/
 
-# Maturin
-bindings/python/.github/
+# Python
+bindings/python/__pycache__/
+bindings/python/*.py[cod]
+bindings/python/*.egg
+bindings/python/*.egg-info/
+bindings/python/.coverage
+bindings/python/.mypy_cache/
+bindings/python/.pytest_cache/
+bindings/python/.python-version
+bindings/python/build/
+bindings/python/dist/
+bindings/python/env/
+bindings/python/htmlcov/
+bindings/python/target/
+bindings/python/venv/
 
 # IDE
-.vscode/
 .idea/
+.vscode/
 
 # OS
 .DS_Store
 Thumbs.db
+
+# Publish Duplicates
+bindings/*/LICENSE
+bindings/*/README.md
+core/LICENSE
+core/README.md

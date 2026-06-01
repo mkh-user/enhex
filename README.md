@@ -14,13 +14,13 @@ EnhEx fixes this:
 
 - **Write** patterns in a clean, human-readable syntax
 - **Compile** to standard Regex that works everywhere
-- **One core**, written in Rust, compiled to WASM — runs identically in every language
+- **One core**, written in Rust, compiled to WASM or native extension — runs identically in every language
 
 ### Language Support Status:
 
 - Rust: ✅ Native
-- Python: ✅ `enhex` at PyPI with WASM
-- JavaScript: ✅ `enhexjs` at NPM with WASM
+- Python: ✅ `enhex` at PyPI with native extension (PyO3)
+- JavaScript: ✅ `enhexjs` at NPM with WASM (WASM BindGen)
 
 ---
 
@@ -129,90 +129,9 @@ enhex version
 
 ---
 
-## Syntax Overview
+## Syntax
 
-### Atoms (Basic Building Blocks)
-
-| EnhEx | Description | Regex Equivalent |
-|:------|:------------|:-----------------|
-| `digit` | Any digit 0-9 | `\d` |
-| `word_char` | Letter, digit, or underscore | `\w` |
-| `whitespace` | Space, tab, or newline | `\s` |
-| `lowercase` | Lowercase letters a-z | `[a-z]` |
-| `uppercase` | Uppercase letters A-Z | `[A-Z]` |
-| `letter` | Any letter | `[a-zA-Z]` |
-| `anything` | Any character | `.` |
-| `dot` | Literal dot | `\.` |
-| `dash` | Literal dash | `\-` |
-| `tab` | Literal tab | `\t` |
-| `newline` | Literal newline | `\n` |
-| `hex_digit` | Single hex digit (upper or lower) | `[\da-fA-F]` |
-
-### Quantifiers
-
-| EnhEx | Regex Equivalent |
-|:------|:-----------------|
-| `one_or_more(X)` | `X+` |
-| `zero_or_more(X)` | `X*` |
-| `optional(X)` | `X?` |
-| `exactly(N, X)` | `X{N}` |
-| `at_least(N, X)` | `X{N,}` |
-| `between(N, M, X)` | `X{N,M}` |
-| `one_or_more_lazy(X)` | `X+?` |
-| `zero_or_more_lazy(X)` | `X*?` |
-| `optional_lazy(X)` | `X??` |
-
-### Composition & Anchors
-
-| EnhEx | Meaning | Regex Equivalent |
-|:------|:--------|:-----------------|
-| `X + Y` | X followed by Y | `XY` |
-| `X \| Y` | X or Y | `X\|Y` |
-| `"text"` | Literal text | escaped text |
-| `start` | Start of string | `^` |
-| `end` | End of string | `$` |
-| `word_boundary` | Word boundary | `\b` |
-
-### Groups
-
-| EnhEx | Regex Equivalent |
-|:------|:-----------------|
-| `group(X)` | `(X)` |
-| `non_capturing(X)` | `(?:X)` |
-| `named("name", X)` | `(?P<name>X)` |
-| `not(X)` | `[^X]` |
-
-### Lookaround
-
-| EnhEx | Regex Equivalent |
-|:------|:-----------------|
-| `followed_by(X)` | `(?=X)` |
-| `not_followed_by(X)` | `(?!X)` |
-| `preceded_by(X)` | `(?<=X)` |
-| `not_preceded_by(X)` | `(?<!X)` |
-
-### Backreferences
-
-| EnhEx | Regex Equivalent |
-|:------|:-----------------|
-| `backref(1)` | `\1` |
-| `backref("name")` | `(?P=name)` |
-
-### Raw Regex Literal
-
-| EnhEx | Regex |
-|:---|:---|
-| `regex("\\d{3}-\\d{4}")` | `\d{3}-\d{4}` |
-| `/[\w\.-]+@[\w-]+\.[a-z]{2,10}/` | `[\w\.-]+@[\w-]+\.[a-z]{2,10}` |
-
-### Built-in Presets
-
-| EnhEx | Matches |
-|:------|:--------|
-| `tld()` | Top-level domain (com, org, ir, ...) |
-| `email()` | Full email address |
-| `url()` | URL |
-| `ipv4()` | IPv4 address |
+See [EnhEx Language Specification](https://github.com/mkh-user/enhex/blob/main/SPEC.md) for complete syntax.
 
 ---
 
@@ -227,7 +146,9 @@ start + one_or_more(word_char | dot | dash) + "@" + one_or_more(word_char | dash
 
 ---
 
-## Project Structure
+## Development
+
+### Project Structure
 
 ```
 enhex/
@@ -242,9 +163,7 @@ enhex/
 └── README.md
 ```
 
----
-
-## Roadmap
+### Roadmap
 
 - [x] Language specification
 - [x] Rust core engine + WASM
@@ -253,6 +172,21 @@ enhex/
 - [x] JavaScript/TypeScript binding
 - [ ] VSCode extension (syntax highlighting + live preview)
 - [ ] Web playground
+
+### Versioning Policy
+
+EnhEx uses a separated versioning for core and each bindings, for example this list maybe current last versions:
+```text
+core-v0.2
+py-v0.5
+js-v0.3.1
+```
+
+Rules:
+- Each core version change results in the same type of version increment across all bindings. (`core-v0.4 -> core-v0.5`: `py-v0.6 -> py-v0.7`, `js-v0.5 -> js-v0.6`)
+- Each binding can have a patch or minor version increment (the major version is only changed by the core), and this change has no effect on the core version or other bindings.
+
+The changelog for the core and each binding is available **in a separate file**; see [CHANGELOG.md](CHANGELOG.md) for an overview.
 
 ---
 
