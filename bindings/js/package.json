@@ -1,6 +1,6 @@
 {
   "name": "enhexjs",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "EnhEx - Enhanced Expression. Write readable patterns, get Regex.",
   "license": "MIT",
   "repository": {

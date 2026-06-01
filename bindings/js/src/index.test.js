@@ -1,4 +1,4 @@
-import { compile, compileRegExp } from './index.js';
+import { compile, compileRegExp, enhex } from './index.js';
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 
@@ -48,5 +48,16 @@ describe('EnhEx JavaScript Binding', () => {
         assert.ok(re.global);
         assert.ok(re.ignoreCase);
         assert.ok(re.test('abc'));
+    });
+
+    it('should work as tagged template literal', () => {
+        const regex = enhex`start + one_or_more(digit) + end`;
+        assert.equal(regex, '^\\d+$');
+    });
+
+    it('should support interpolation in tagged template', () => {
+        const subPattern = 'one_or_more(digit)';
+        const regex = enhex`start + ${subPattern} + end`;
+        assert.equal(regex, '^\\d+$');
     });
 });

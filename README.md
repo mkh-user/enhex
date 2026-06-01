@@ -87,9 +87,10 @@ if re.match(pattern, "367812009"):
 ### JavaScript
 
 ```javascript
-import { compile } from 'enhexjs';
+import { enhex, compile, compileRegExp } from 'enhexjs';
 
-const pattern = compile('start + one_or_more(digit) + end');
+// or compile('start + one_or_more(digit) + end'):
+const pattern = enhex`start + one_or_more(digit) + end`;
 const regex = new RegExp(pattern);
 
 if (regex.test('12345')) {

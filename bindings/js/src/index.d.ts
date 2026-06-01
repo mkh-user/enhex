@@ -12,3 +12,11 @@ export function compile(pattern: string): string;
  * @returns A RegExp object.
  */
 export function compileRegExp(pattern: string, flags?: string): RegExp;
+
+/**
+ * Tagged template literal for EnhEx patterns.
+ * @param strings - Template string parts
+ * @param values - Interpolated values
+ * @returns Compiled Regex string
+ */
+export function enhex(strings: TemplateStringsArray, ...values: any[]): string;

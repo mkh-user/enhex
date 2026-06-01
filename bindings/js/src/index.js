@@ -27,3 +27,31 @@ export function compile(pattern) {
 export function compileRegExp(pattern, flags = '') {
     return new RegExp(compile(pattern), flags);
 }
+
+/**
+ * Tagged template literal for EnhEx patterns.
+ *
+ * @param {string[]} strings - Template string parts
+ * @param {...any} values - Interpolated values
+ * @returns {string} Compiled Regex string
+ *
+ * @example
+ * const regex = enhex`start + one_or_more(digit) + end`;
+ * // regex = "^\\d+$"
+ *
+ * @example
+ * const domain = "example\\.com";
+ * const regex = enhex`start + one_or_more(word_char | dot | dash) + "@" + ${domain} + end`;
+ */
+export function enhex(strings, ...values) {
+    // Combine template parts with interpolated values
+    let pattern = '';
+    for (let i = 0; i < strings.length; i++) {
+        pattern += strings[i];
+        if (i < values.length) {
+            pattern += values[i];
+        }
+    }
+
+    return compile(pattern);
+}
