@@ -9,4 +9,4 @@ This file only provides an overview of independent versioning of each component.
 [Python Binding Changelog](bindings/python/CHANGELOG.md) - v0.3.0
 
 ## JavaScript Binding
-[JavaScript Binding Changelog](bindings/js/CHANGELOG.md) - v0.3.1
+[JavaScript Binding Changelog](bindings/js/CHANGELOG.md) - v0.4.0
