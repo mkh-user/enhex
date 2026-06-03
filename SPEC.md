@@ -427,7 +427,7 @@ used to override **EnhEx** precedence.
 ```
 # These are different:
 digit | letter + digit        → \d|[a-zA-Z]\d
-group(digit | letter) + digit → (\d|[a-zA-Z])\d
+(digit | letter) + digit → [\da-zA-Z]\d
 ```
 
 ---

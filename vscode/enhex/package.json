@@ -1,0 +1,76 @@
+{
+  "name": "enhex",
+  "displayName": "EnhEx",
+  "description": "Enhanced Expressions Support for VS Code",
+  "author": {
+    "name": "Mahan Khalili",
+    "email": "khalili1388mahan@gmail.com",
+    "url": "https://github.com/mkh-user"
+  },
+  "license": "MIT",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mkh-user/enhex"
+  },
+  "publisher": "mkh-user",
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "multi-root ready"
+  ],
+  "main": "./client/out/extension",
+  "contributes": {
+    "languages": [
+      {
+        "id": "enhex",
+        "aliases": [
+          "EnhEx",
+          "enhex"
+        ],
+        "extensions": [
+          ".enhex"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "enhex",
+        "scopeName": "source.enhex",
+        "path": "./syntaxes/enhex.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "EnhEx",
+      "properties": {
+        "enhex.maxNumberOfProblems": {
+          "scope": "resource",
+          "type": "number",
+          "default": 100,
+          "description": "Controls the maximum number of problems produced by extension."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -b",
+    "watch": "tsc -b -w",
+    "lint": "eslint",
+    "postinstall": "cd client && npm install && cd ../server && npm install && cd .."
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "@types/node": "^25.9.1",
+    "eslint": "^10.4.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.60.1"
+  }
+}

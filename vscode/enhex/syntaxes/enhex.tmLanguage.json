@@ -1,0 +1,54 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "EnhEx",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.atom.enhex",
+				"match": "\\b(digit|non_digit|word_char|non_word_char|whitespace|non_whitespace|lowercase|uppercase|letter|anything|dot|dash|tab|newline|carriage_return|hex_digit|null|vertical_tab|form_feed|bell|backslash)\\b"
+			}, {
+				"name": "keyword.regex.enhex",
+				"match": "\\bregex\\b"
+			}, {
+				"name": "keyword.quantifier.enhex",
+				"match": "\\b(one_or_more|zero_or_more|optional|exactly|at_least|between|one_or_more_lazy|zero_or_more_lazy|optional_lazy)\\b"
+			}, {
+				"name": "keyword.group.enhex",
+				"match": "\\b(group|non_capturing|named|not)\\b"
+			}, {
+				"name": "keyword.anchor.enhex",
+				"match": "\\b(start|end|word_boundary)\\b"
+			}, {
+				"name": "keyword.lookaround.enhex",
+				"match": "\\b(followed_by|not_followed_by|preceded_by|not_preceded_by)\\b"
+			}, {
+				"name": "keyword.backref.enhex",
+				"match": "\\bbackref\\b"
+			}, {
+				"name": "keyword.preset.enhex",
+				"match": "\\b(tld|email|url|ipv4)\\b"
+			}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.enhex",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.enhex",
+					"match": "\\\\."
+				}
+			]
+		}
+	},
+	"scopeName": "source.enhex"
+}

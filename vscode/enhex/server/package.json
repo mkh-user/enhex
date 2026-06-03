@@ -1,0 +1,25 @@
+{
+  "name": "enhex-server",
+  "version": "0.1.0",
+  "description": "EnhEx LSP Server (VS Code)",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Mahan Khalili",
+    "email": "khalili1388mahan@gmail.com",
+    "url": "https://github.com/mkh-user"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mkh-user/enhex"
+  },
+  "dependencies": {
+    "vscode-languageserver": "^9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.12"
+  }
+}

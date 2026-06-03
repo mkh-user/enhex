@@ -1,0 +1,29 @@
+{
+  "name": "enhex-client",
+  "version": "0.1.0",
+  "description": "EnhEx LSP Client (VS Code)",
+  "publisher": "mkh-user",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mkh-user/enhex"
+  },
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Mahan Khalili",
+    "email": "khalili1388mahan@gmail.com",
+    "url": "https://github.com/mkh-user"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/vscode": "^1.120.0",
+    "@vscode/test-electron": "^2.5.2"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  }
+}
