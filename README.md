@@ -2,6 +2,10 @@
 
 _Regex, Enhanced for Readability._
 
+![PyPI - Downloads](https://img.shields.io/pypi/dw/enhex?logo=python&logoColor=yellow&label=PyPI%20downloads&labelColor=black&color=white)
+![NPM - Downloads](https://img.shields.io/npm/dw/enhexjs?logo=npm&logoColor=red&label=npm%20downloads&labelColor=black&color=white)
+![Crates.io - Downloads](https://img.shields.io/crates/d/enhex_core?logo=rust&logoColor=orange&label=core%20downloads&labelColor=black&color=white)
+
 EnhEx is a simple, readable language for writing regular expressions. Write patterns like sentences. Get standard Regex output. Use it anywhere — Python, JavaScript, Rust, CLI, browser.
 
 ---
@@ -16,7 +20,7 @@ EnhEx fixes this:
 - **Compile** to standard Regex that works everywhere
 - **One core**, written in Rust, compiled to WASM or native extension — runs identically in every language
 
-### Language Support Status:
+### Language Support Status
 
 - Rust: ✅ Native
 - Python: ✅ `enhex` at PyPI with native extension (PyO3)
@@ -27,12 +31,14 @@ EnhEx fixes this:
 ## Quick Example
 
 ### EnhEx Input
-```
+
+```enhex
 start + one_or_more(word_char | dot | dash) + "@" + one_or_more(word_char | dash) + dot + tld() + end
 ```
 
 ### Regex Output
-```
+
+```regex
 ^[\w\.-]+@[\w-]+\.[a-z]{2,10}$
 ```
 
@@ -43,21 +49,25 @@ Same logic, but you can actually **read** the first one.
 ## Installation
 
 ### Python
+
 ```bash
 pip install enhex
 ```
 
 ### Rust
+
 ```bash
 cargo install enhex-core
 ```
 
 ### JavaScript / TypeScript
+
 ```bash
 npm install enhexjs
 ```
 
 ### CLI (via Python)
+
 ```bash
 pip install enhex
 enhex compile "start + one_or_more(digit) + end"
@@ -68,7 +78,8 @@ enhex compile "start + one_or_more(digit) + end"
 
 ## Usage
 
-### Python
+### Python Library
+
 ```python
 import enhex as ex
 
@@ -84,7 +95,7 @@ if re.match(pattern, "367812009"):
     print("Valid number!")
 ```
 
-### JavaScript
+### JavaScript Pakcage
 
 ```javascript
 import { enhex, compile, compileRegExp } from 'enhexjs';
@@ -103,10 +114,10 @@ const re = compileRegExp('start + one_or_more(digit) + end');
 if (re.test('12345')) {
     console.log('Only digits!');
 }
-
 ```
 
-### Rust
+### Rust Crate
+
 ```rust
 use enhex_core::compile;
 
@@ -117,6 +128,7 @@ assert!(re.is_match("12345"));
 ```
 
 ### CLI
+
 ```bash
 # Compile a pattern string
 enhex compile 'start + exactly(10, digit) + end'
@@ -141,7 +153,8 @@ See [EnhEx Language Specification](https://github.com/mkh-user/enhex/blob/main/S
 EnhEx patterns are stored in `.enhex` files:
 
 `email.enhex`:
-```
+
+```enhex
 start + one_or_more(word_char | dot | dash) + "@" + one_or_more(word_char | dash) + "." + tld() + end
 ```
 
@@ -151,7 +164,7 @@ start + one_or_more(word_char | dot | dash) + "@" + one_or_more(word_char | dash
 
 ### Project Structure
 
-```
+```text
 enhex/
 ├── core/          # Rust core engine
 ├── bindings/
@@ -177,6 +190,7 @@ enhex/
 ### Versioning Policy
 
 EnhEx uses a separated versioning for core and each bindings, for example this list maybe current last versions:
+
 ```text
 core-v0.2
 py-v0.5
@@ -184,6 +198,7 @@ js-v0.3.1
 ```
 
 Rules:
+
 - Each core version change results in the same type of version increment across all bindings. (`core-v0.4 -> core-v0.5`: `py-v0.6 -> py-v0.7`, `js-v0.5 -> js-v0.6`)
 - Each binding can have a patch or minor version increment (the major version is only changed by the core), and this change has no effect on the core version or other bindings.
 
@@ -197,4 +212,4 @@ MIT © Mahan Khalili
 
 ---
 
-*RegEx, Enhanced.*
+_RegEx, Enhanced._
