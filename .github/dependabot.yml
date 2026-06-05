@@ -4,15 +4,47 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    assignees: "mkh-user"
+    commit-message:
+      prefix: "dep(actions)"
+    groups:
+      - actions-dependencies:
+          patterns: [ "*" ]
+      
   - package-ecosystem: "npm"
     directory: "/bindings/js/"
     schedule:
       interval: "weekly"
+    assignees: "mkh-user"
+    commit-message:
+      prefix: "dep(js)"
+      prefix-development: "dep(js-dev)"
+    groups:
+      - security-dependencies:
+          applies-to: "security-updates"
+      - dev-dependencies:
+          dependency-type: "development"
+      - js-dependencies:
+          ptterns: [ "*" ]
+      
   - package-ecosystem: "cargo"
     directory: "/bindings/python/"
     schedule:
       interval: "weekly"
+    assignees: "mkh-user"
+    commit-message:
+      prefix: "dep(py)"
+    groups:
+      - py-dependencies:
+          ptterns: [ "*" ]
+      
   - package-ecosystem: "cargo"
     directory: "/core/"
     schedule:
       interval: "weekly"
+    assignees: "mkh-user"
+    commit-message:
+      prefix: "dep(rust)"
+    groups:
+      - core-dependencies:
+          ptterns: [ "*" ]
