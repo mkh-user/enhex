@@ -1,0 +1,21 @@
+# expect: ^https?:\/\/(?:[a-zA-Z\d-]+\.)+[a-z]{2,10}(?::\d{2,5})?(?:\/[^\s\?#]*)?(?:\?[^\s#]*)?(?:#[^\s]*)?$
+start
++ "http" + optional("s") + "://" # Required protocol
++ one_or_more(
+    non_capturing(one_or_more(letter | digit | dash)
+    + ".")
+) # Domain sections
++ tld() # Top Level Domain (EnhEx internal preset)
++ optional( # Port
+    non_capturing(":" + between(2, 5, digit))
+)
++ optional( # Path
+    non_capturing("/" + zero_or_more(not(whitespace | "?" | "#")))
+)
++ optional( # Query string
+    non_capturing("?" + zero_or_more(not(whitespace | "#")))
+)
++ optional( # Hash
+    non_capturing("#" + zero_or_more(not(whitespace)))
+)
++ end

@@ -113,7 +113,7 @@ fn generate_atom(atom: &Atom) -> String {
 }
 
 fn regex_escape(s: &str) -> String {
-    let special = ['.', '+', '*', '?', '[', ']', '(', ')', '{', '}', '^', '$', '|', '\\'];
+    let special = ['.', '+', '*', '?', '[', ']', '(', ')', '{', '}', '^', '$', '|', '\\', '/'];
     let mut result = String::new();
     for ch in s.chars() {
         if special.contains(&ch) {
