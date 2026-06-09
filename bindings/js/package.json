@@ -2,25 +2,6 @@
   "name": "enhexjs",
   "version": "0.4.0",
   "description": "EnhEx - Enhanced Expression. Write readable patterns, get Regex.",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mkh-user/enhex.git"
-  },
-  "type": "module",
-  "main": "./src/index.js",
-  "types": "./src/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./src/index.d.ts",
-      "import": "./src/index.js",
-      "require": "./src/index.cjs"
-    }
-  },
-  "files": [
-    "src/",
-    "pkg/"
-  ],
   "keywords": [
     "regex",
     "dsl",
@@ -29,6 +10,48 @@
     "compiler",
     "enhanced-expression"
   ],
+  "homepage": "https://github.com/mkh-user/enhex",
+  "bugs":{
+    "url": "https://github.com/mkh-user/enhex/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Mahan Khalili",
+    "email": "khalili1388mahan@gmail.com",
+    "url": "https://github.com/mkh-user"
+  },
+  "contributors": [
+    {
+      "name": "Mahan Khalili",
+      "email": "khalili1388mahan@gmail.com",
+      "url": "https://github.com/mkh-user"
+    }
+  ],
+  "maintainers": [
+    {
+      "name": "Mahan Khalili",
+      "email": "khalili1388mahan@gmail.com",
+      "url": "https://github.com/mkh-user"
+    }
+  ],
+  "files": [
+    "src/",
+    "pkg/"
+  ],
+  "main": "./src/index.js",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js",
+      "require": "./src/index.cjs"
+    }
+  },
+  "type": "module",
+  "types": "./src/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkh-user/enhex.git"
+  },
   "scripts": {
     "build": "node scripts/copy-wasm.js",
     "test": "node --test src/*.test.js",
