@@ -22,6 +22,9 @@ bindings/python/htmlcov/
 bindings/python/target/
 bindings/python/venv/
 
+# VS Code Extenion
+vscode/enhex/**/node_modules/
+
 # IDE
 .idea/
 .vscode/
