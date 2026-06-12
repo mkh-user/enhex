@@ -15,4 +15,4 @@ pyo3 = { version = "0.28", features = ["extension-module"] }
 enhex_core = { path = "../../core" }
 
 [build-dependencies]
-pyo3-build-config = "0.28"
+pyo3-build-config = "0.29"
