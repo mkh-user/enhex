@@ -36,7 +36,7 @@ jobs:
           - runner: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v6
         with:
@@ -76,7 +76,7 @@ jobs:
           - runner: ubuntu-latest
             target: armv7-unknown-linux-musleabihf
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v6
         with:
@@ -117,7 +117,7 @@ jobs:
             target: aarch64-pc-windows-msvc
             python_arch: arm64
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v6
         with:
@@ -153,7 +153,7 @@ jobs:
           - runner: macos-latest
             target: aarch64-apple-darwin
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v6
         with:
@@ -180,7 +180,7 @@ jobs:
   sdist:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Copy README & LICENSE
         run: |
