@@ -33,7 +33,13 @@ EnhEx fixes this:
 ### EnhEx Input
 
 ```enhex
-start + one_or_more(word_char | dot | dash) + "@" + one_or_more(word_char | dash) + dot + tld() + end
+start
++ one_or_more(word_char | dot | dash)
++ "@" 
++ one_or_more(word_char | dash)
++ dot
++ tld()
++ end
 ```
 
 ### Regex Output
