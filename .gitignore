@@ -1,12 +1,17 @@
-# Rust
+### Rust ###
+target/
 core/target/
-core/pkg
+core/pkg/
 
-# JavaScript
+### JavaScript ###
+node_modules/
+dist/
 bindings/js/node_modules/
 bindings/js/pkg/
 
-# Python
+### Python ###
+__pycache__/
+*.py[cod]
 bindings/python/__pycache__/
 bindings/python/*.py[cod]
 bindings/python/*.egg
@@ -22,18 +27,18 @@ bindings/python/htmlcov/
 bindings/python/target/
 bindings/python/venv/
 
-# VS Code Extenion
+### VS Code Extension ###
 vscode/enhex/**/node_modules/
 
-# IDE
+### IDE ###
 .idea/
 .vscode/
 
-# OS
+### OS ###
 .DS_Store
 Thumbs.db
 
-# Publish Duplicates
+### Publish Duplicates ###
 bindings/*/LICENSE
 bindings/*/README.md
 core/LICENSE

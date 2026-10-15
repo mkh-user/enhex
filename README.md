@@ -95,7 +95,7 @@ if re.match(pattern, "367812009"):
     print("Valid number!")
 ```
 
-### JavaScript Pakcage
+### JavaScript Package
 
 ```javascript
 import { enhex, compile, compileRegExp } from 'enhexjs';
