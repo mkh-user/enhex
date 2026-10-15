@@ -6,7 +6,7 @@
 
 ### 📦 Changes
 - **Updated:** wasm-bindgen from 0.2.127 to 0.2.128
-- **Updated:** thiserror from 2.0.19 to 0.2.20
+- **Updated:** thiserror from 2.0.19 to 2.0.20
 
 ### 🔗 Installation
 ```bash

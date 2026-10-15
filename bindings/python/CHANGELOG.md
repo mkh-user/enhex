@@ -5,6 +5,14 @@ All notable changes to EnhEx Python binding will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [py-v0.3.1] - 2026-09-11
+
+_Sync to [core-v0.3.1](https://github.com/mkh-user/enhex/releases/tag/core-v0.3.1)_
+
+### Changed
+
+- Update `pyo3` from 0.28 to 0.29
+
 ## [py-v0.3.0] - 2026-05-29
 
 _Sync to [core-v0.3.0](https://github.com/mkh-user/enhex/releases/tag/core-v0.3.0)_
@@ -24,6 +32,7 @@ _Sync to [core-v0.2.0](https://github.com/mkh-user/enhex/releases/tag/core-v0.2.
 - Python `enhex` package
 - CLI
 
+[py-v0.3.1]: https://github.com/mkh-user/enhex/releases/tag/py-v0.3.1
 [py-v0.3.0]: https://github.com/mkh-user/enhex/releases/tag/v0.3.0
 [py-v0.2.0]: https://github.com/mkh-user/enhex/releases/tag/v0.2.0
 [py-v0.1.0]: https://github.com/mkh-user/enhex/releases/tag/v0.1.0
