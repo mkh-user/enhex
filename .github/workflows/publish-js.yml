@@ -41,6 +41,9 @@ jobs:
         working-directory: bindings/js
         run: npm ci
 
+      - name: Update npm for trusted publishing
+        run: npm install -g npm@latest
+
       - name: Test JS Package
         working-directory: bindings/js
         run: npm test
