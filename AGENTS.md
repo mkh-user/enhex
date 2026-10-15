@@ -43,7 +43,8 @@ python examples/_test.py                     # needs installed `enhex`; exits 1 
 - `publish-core.yml` (`core-v*`) — `cargo test` then `cargo publish`.
 - `publish-js.yml` (`js-v*`) — wasm build, copy, `npm test`, `npm publish`.
 - Publishing uses **OIDC trusted publishing** (`id-token: write`, no static tokens):
-  crates.io via `rust-lang/crates-io-auth-action`, PyPI via `uv publish`,
+  crates.io via `rust-lang/crates-io-auth-action`, PyPI via
+  `twine upload --skip-existing` (retry-safe; twine uses the same OIDC identity),
   npm via `npm publish --provenance` (workflow must be on the registry trust list).
 - `codeql.yml` — 4 languages; Rust uses `build-mode: manual` + `cargo build`.
   Keep `paths:` filters so docs-only changes skip the matrix.
