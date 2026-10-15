@@ -42,8 +42,9 @@ python examples/_test.py                     # needs installed `enhex`; exits 1 
 - `build-python.yml` (`py-v*` tags) — 14-job wheel matrix + PyPI publish.
 - `publish-core.yml` (`core-v*`) — `cargo test` then `cargo publish`.
 - `publish-js.yml` (`js-v*`) — wasm build, copy, `npm test`, `npm publish`.
-- Publishing uses **token secrets only** (trusted publishing failed before):
-  `CARGO_TOKEN`, `PYPI_TOKEN` (`UV_PUBLISH_TOKEN`), `NPM_TOKEN`.
+- Publishing uses **OIDC trusted publishing** (`id-token: write`, no static tokens):
+  crates.io via `rust-lang/crates-io-auth-action`, PyPI via `uv publish`,
+  npm via `npm publish --provenance` (workflow must be on the registry trust list).
 - `codeql.yml` — 4 languages; Rust uses `build-mode: manual` + `cargo build`.
   Keep `paths:` filters so docs-only changes skip the matrix.
 
