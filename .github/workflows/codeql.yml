@@ -3,8 +3,16 @@ name: "CodeQL"
 on:
   push:
     branches: "main"
+    paths:
+      - 'core/**'
+      - 'bindings/**'
+      - '.github/workflows/codeql.yml'
   pull_request:
     branches: "main"
+    paths:
+      - 'core/**'
+      - 'bindings/**'
+      - '.github/workflows/codeql.yml'
   schedule:
     - cron: '0 0 * * 4'
   workflow_dispatch:
@@ -29,30 +37,22 @@ jobs:
         - language: python
           build-mode: none
         - language: rust
-          build-mode: none
+          build-mode: manual
     steps:
     - name: Checkout repository
       uses: actions/checkout@v7
 
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v4.38.2
+      uses: github/codeql-action/init@v4
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
 
-    # May be used later
-    - name: Run manual build steps
-      if: matrix.build-mode == 'manual'
-      shell: bash
-      run: |
-        echo 'If you are using a "manual" build mode for one or more of the' \
-          'languages you are analyzing, replace this with the commands to build' \
-          'your code, for example:'
-        echo '  make bootstrap'
-        echo '  make release'
-        exit 1
+    - name: Build Rust (manual)
+      if: matrix.language == 'rust'
+      run: cargo build --manifest-path core/Cargo.toml
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v4.38.2
+      uses: github/codeql-action/analyze@v4
       with:
         category: "/language:${{matrix.language}}"

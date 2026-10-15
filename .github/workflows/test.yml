@@ -1,0 +1,82 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core:
+    name: Rust core tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Run cargo test
+        run: cargo test --manifest-path core/Cargo.toml
+
+  js:
+    name: JavaScript tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          package-manager-cache: false
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install wasm-pack
+        uses: jetli/wasm-pack-action@v0.4.0
+
+      - name: Build WASM
+        working-directory: core
+        run: wasm-pack build --target nodejs --out-dir pkg --out-name enhex-core
+
+      - name: Copy WASM
+        working-directory: bindings/js
+        run: node scripts/copy-wasm.js
+
+      - name: Install dependencies
+        working-directory: bindings/js
+        run: npm ci
+
+      - name: Test JS package
+        working-directory: bindings/js
+        run: npm test
+
+  python:
+    name: Python tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build and install Python package
+        run: pip install ./bindings/python
+
+      - name: Test Python examples
+        run: python examples/_test.py

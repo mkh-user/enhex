@@ -5,7 +5,7 @@ on:
     branches:
       - main
     tags:
-      - '*'
+      - 'py-v*'
     paths:
       - 'core/**'
       - 'bindings/python/**'
@@ -19,6 +19,10 @@ on:
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   linux:
@@ -206,19 +210,14 @@ jobs:
     if: ${{ startsWith(github.ref, 'refs/tags/py-v') }}
     needs: [linux, musllinux, windows, macos, sdist]
     permissions:
-      id-token: write
-      contents: write
-      attestations: write
+      contents: read
     steps:
-      - uses: actions/download-artifact@v8
-
-      - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v4
-        with:
-          subject-path: 'wheels-*/*'
+      - uses: actions/download-artifact@v7
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
 
       - name: Publish to PyPI
         run: uv publish 'wheels-*/*'
+        env:
+          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}

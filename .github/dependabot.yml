@@ -4,7 +4,7 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    assignees: "mkh-user"
+    assignees: ["mkh-user"]
     commit-message:
       prefix: "dep(actions)"
     groups:
@@ -15,7 +15,7 @@ updates:
     directory: "/bindings/js/"
     schedule:
       interval: "weekly"
-    assignees: "mkh-user"
+    assignees: ["mkh-user"]
     commit-message:
       prefix: "dep(js)"
       prefix-development: "dep(js-dev)"
@@ -25,26 +25,26 @@ updates:
       - dev-dependencies:
           dependency-type: "development"
       - js-dependencies:
-          ptterns: [ "*" ]
+          patterns: [ "*" ]
       
   - package-ecosystem: "cargo"
     directory: "/bindings/python/"
     schedule:
       interval: "weekly"
-    assignees: "mkh-user"
+    assignees: ["mkh-user"]
     commit-message:
       prefix: "dep(py)"
     groups:
       - py-dependencies:
-          ptterns: [ "*" ]
+          patterns: [ "*" ]
       
   - package-ecosystem: "cargo"
     directory: "/core/"
     schedule:
       interval: "weekly"
-    assignees: "mkh-user"
+    assignees: ["mkh-user"]
     commit-message:
       prefix: "dep(rust)"
     groups:
       - core-dependencies:
-          ptterns: [ "*" ]
+          patterns: [ "*" ]
