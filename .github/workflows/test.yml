@@ -75,6 +75,11 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Copy README & LICENSE
+        run: |
+          cp README.md bindings/python/README.md
+          cp LICENSE bindings/python/LICENSE
+
       - name: Build and install Python package
         run: pip install ./bindings/python
 
