@@ -52,7 +52,7 @@ jobs:
           cp LICENSE bindings/python/LICENSE
 
       - name: Build wheels
-        uses: PyO3/maturin-action@v1
+        uses: PyO3/maturin-action@v1.47.3 
         with:
           working-directory: bindings/python
           target: ${{ matrix.platform.target }}
