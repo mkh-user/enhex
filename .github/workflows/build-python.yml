@@ -58,6 +58,8 @@ jobs:
           target: ${{ matrix.platform.target }}
           args: --release --out dist --find-interpreter
           manylinux: auto
+          before-script-linux: |
+            yum install -y libatomic
 
       - name: Upload wheels
         uses: actions/upload-artifact@v7
